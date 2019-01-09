@@ -9,6 +9,9 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=AQUICLIENT_ID&client_secret=AQUI
  
 // recibimos la respuesta y la guardamos en una variable
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//Disable ssl verification to Wamp install
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $remote_server_output = curl_exec ($ch);
  
 // cerramos la sesión cURL
