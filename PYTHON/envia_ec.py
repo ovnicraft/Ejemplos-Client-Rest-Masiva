@@ -1,3 +1,5 @@
+import sys
+
 import requests
 
 CLIENT_ID = ""
@@ -5,20 +7,6 @@ CLIENT_SECRET = ""
 GRANT_TYPE = "client_credentials"
 ENDPOINT_AUTH = "https://api.login-sms.com/token"
 ENDPOINT_SEND_SMS = "https://api.login-sms.com/messages/send"
-
-
-auth = requests.post(
-    ENDPOINT_AUTH,
-    data={
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-        "grant_type": GRANT_TYPE,
-    },
-)
-
-if auth.ok:
-    access = auth.json()
-    print("access token granted")
 
 
 def get_token():
@@ -30,7 +18,9 @@ def get_token():
             "grant_type": GRANT_TYPE,
         },
     )
-    return auth
+    if not auth.ok:
+        return False
+    return auth.json()
 
 
 def send_sms(access, number, message):
@@ -49,5 +39,7 @@ def send_sms(access, number, message):
 
 if __name__ == "__main__":
     access = get_token()
+    if not access:
+        sys.exit(1)
     msg = "Seguros Constitucion informa que su póliza contratada registra un saldo pendiente de 1200.00 con 13 días vencidos. Agradecemos su pago inmediato"
-    send_sms(access, "+593999999999", msg)
+    send_sms(access, "+593995666327", msg)
